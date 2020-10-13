@@ -1,5 +1,10 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
+import * as Yup from 'yup';
+
+import getValidationErrors from '../../utils/getValidationErrors';
 
 import logoImg from '../../assets/logo.svg';
 
@@ -8,36 +13,61 @@ import Button from '../../components/Button';
 
 import { Container, Content, Background } from './styles';
 
-const SignIn: React.FC = () => (
-  <>
-    <Container>
-      <Content>
-        <img src={logoImg} alt="Gobarber" />
+const SignIn: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
 
-        <form>
-          <h1>Faça seu Logon </h1>
+  const handleSubmit = useCallback(async (data: object) => {
+    try {
+      formRef.current?.setErrors({});
 
-          <Input name="email" icon={FiMail} placeholder="Email" />
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .required('Email Obrigatório')
+          .email('Digite um E-mail válido'),
+        password: Yup.string().required('Senha Obrigatória'),
+      });
 
-          <Input
-            name="password"
-            icon={FiLock}
-            type="password"
-            placeholder="senha"
-          />
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+    } catch (err) {
+      const errors = getValidationErrors(err);
+      formRef.current?.setErrors(errors);
 
-          <Button type="submit">Entrar</Button>
-          <a href="#"> Esqueci minha senha</a>
-        </form>
+      console.log(errors);
+    }
+  }, []);
+  return (
+    <>
+      <Container>
+        <Content>
+          <img src={logoImg} alt="Gobarber" />
 
-        <a href="Criar Conta">
-          <FiLogIn />
-          Criar conta
-        </a>
-      </Content>
-      <Background></Background>
-    </Container>
-  </>
-);
+          <Form ref={formRef} onSubmit={handleSubmit}>
+            <h1>Faça seu Logon </h1>
+
+            <Input name="email" icon={FiMail} placeholder="Email" />
+
+            <Input
+              name="password"
+              icon={FiLock}
+              type="password"
+              placeholder="senha"
+            />
+
+            <Button type="submit">Entrar</Button>
+            <a href="#"> Esqueci minha senha</a>
+          </Form>
+
+          <a href="Criar Conta">
+            <FiLogIn />
+            Criar conta
+          </a>
+        </Content>
+        <Background></Background>
+      </Container>
+    </>
+  );
+};
 
 export default SignIn;
