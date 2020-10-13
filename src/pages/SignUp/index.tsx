@@ -1,4 +1,6 @@
 import React from 'react';
+import { Form } from '@unform/web';
+
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi';
 
 import logoImg from '../../assets/logo.svg';
@@ -8,36 +10,42 @@ import Button from '../../components/Button';
 
 import { Container, Content, Background } from './styles';
 
-const SingUp: React.FC = () => (
-  <>
-    <Container>
-      <Background />
-      <Content>
-        <img src={logoImg} alt="Gobarber" />
+const SingUp: React.FC = () => {
+  function handleSubmit(data: object): void {
+    console.log(data);
+  }
 
-        <form>
-          <h1>Faça seu Cadastro </h1>
+  return (
+    <>
+      <Container>
+        <Background />
+        <Content>
+          <img src={logoImg} alt="Gobarber" />
 
-          <Input name="name" icon={FiUser} placeholder="Nome" />
-          <Input name="email" icon={FiMail} placeholder="Email" />
+          <Form onSubmit={handleSubmit}>
+            <h1>Faça seu Cadastro </h1>
 
-          <Input
-            name="password"
-            icon={FiLock}
-            type="password"
-            placeholder="senha"
-          />
+            <Input name="name" icon={FiUser} placeholder="Nome" />
+            <Input name="email" icon={FiMail} placeholder="Email" />
 
-          <Button type="submit">Cadastrar</Button>
-        </form>
+            <Input
+              name="password"
+              icon={FiLock}
+              type="password"
+              placeholder="senha"
+            />
 
-        <a href="Criar Conta">
-          <FiArrowLeft />
-          Voltar para Logon
-        </a>
-      </Content>
-    </Container>
-  </>
-);
+            <Button type="submit">Cadastrar</Button>
+          </Form>
+
+          <a href="Criar Conta">
+            <FiArrowLeft />
+            Voltar para Logon
+          </a>
+        </Content>
+      </Container>
+    </>
+  );
+};
 
 export default SingUp;
