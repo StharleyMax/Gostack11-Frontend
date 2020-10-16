@@ -22,7 +22,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...props }) => {
   const { fieldName, defaultValue, error, registerField } = useField(name);
   const [isFocused, setIsFocused] = useState(false);
   const [isField, setIsField] = useState(false);
-  const [isErrored, setIsErrored] = useState(false);
+  //const [isErrored, setIsErrored] = useState(false);
 
   const handleInputBlur = useCallback(() => {
     setIsFocused(false);
